@@ -1,0 +1,1 @@
+from .qdrant.client import qdrant_client
