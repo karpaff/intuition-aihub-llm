@@ -9,7 +9,7 @@ RAG (Retrieval-Augmented Generation) сервис для ответов на в�
 
 ### Диаграмма последовательности
 
-![text](https://cdn-0.plantuml.com/plantuml/png/dPFHQzim4CRVzLS8FsMiJM6bUoXqDAMZR7HhbcOF8olcQXsEc2rvEZbhAFtVTvBcO8NifG-9BFlttVUTVBua3yxtRIEWyjR9xuHET7nBLxe3usKnct-I2zjxT8K4ahmL2Zmy0g4ibjfihw_YW-khNBUOtSYvxh3H1YCmR7BiO_k8IcbJKuJYTcJmJJd6ugDqcQj_W57uT3DVHkBszeiGeGDv_466tEToVdU_b2SEwfCQVSbh2OR-eFjfdd_tI5vRSowBwNHQl8GJq1lm67iK_CTbk2sk0agLBH91ZPD1zcR7XzOPEzwP4cn24pW6Xdh3AJ3cUXCJTUdMmT83BiHEE8GA3LLhyELQaxTkEsbqg_t5sO5WcUq_VFMG9ymTudjW6CDQSZ2tFHGlOYB1UpPHKsumZDNgtTdxQ9VfSiVqUbb8t4O3JljjIGYkMa_6fOxahulJKO8a4sdPpw1irRTeFArEetqkolrvUEAX6dICJ3fdsyxBjxAonkDJk3hGFui4__PzquonOmRkx4QZie1w5k7df3cIP7jN8QqUNiRwGVh_kKpwrqmb8_6xP-Rp_TrNwP0wQmZ7B7FY4etgs-Ol)
+![text](https://cdn-0.plantuml.com/plantuml/png/dPFHRzCm4CRVyrUSybJ4racWyJ09j4v34sYmqfK7LARe5fzIYyGEFgUiclg_StP8v5RbPG-Du-JttNUVSxraZyvtJPrXwQs3xqmkQ-MHBdMBnaC-ct-2XUqykHoGGRQPGe-Fo0JvKfljzLLySNsrhrlCRc2kMwgreGWCcttiO_D8IcbJSOJYDZ7uffnWyLL_kw_-WKRHqyry6OdRsozP5XB0wOVGA5p0_Ev-2MSEgxEAV25hWOR_aFjfddztn5vRSm7vT3hDT-44z0OznOoPNAICn98gg5JH43DMD1bahqO-H1ViT3Hbt8GGb093lU4K17ETYHsr_QEZfST3oqRXq5G8LAxH5slDthhjfDQDzk_FZpMMslx3Lm-77QOEyJi8J64jf36tFTPUnB9uFRI9cc93OQnMRyxVfNQzRj-n_xmYP8bHezD-Mp2XAzUJjDG9_4eZ3bFHBuSzA5js3HdFgxUf_I1A_SFmn4Crv0IPjCushOVNK5hZwIdS7SaV9av-XxxzZAME0gLsuwWii9f5-BdNd03RpfN4guTTgX-a_v_BNl-IgHGa_k-5-Nn_znKSSMiDKyeAbrsIKLrJ_mK0)
 
 ### Обзор системы
 
@@ -93,7 +93,7 @@ RAG (Retrieval-Augmented Generation) сервис для ответов на в�
    ↓
 4. RAG Pipeline:
    a) Векторизация вопроса (YandexCloudEmbeddings)
-   b) Поиск в Qdrant (top_k=3)
+   b) Поиск в Qdrant (top_k=5)
    c) Формирование промпта с контекстом
    d) Запрос к YandexGPT
    ↓
