@@ -8,8 +8,8 @@ import re
 from uuid import uuid4
 from typing import List
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_community.document_loaders import PyMuPDFLoader
 from langchain.schema import Document
+from loguru import logger
 
 from src.config import settings
 from src.common import qdrant_client
@@ -25,7 +25,7 @@ def is_collection_exists(client: Qdrant, collection_name: str) -> bool:
         return False
     
 def download_pdf(url: str, output_path: str) -> str:
-    print(f"Скачивание PDF: {url}")
+    logger.info(f"Скачивание PDF: {url}")
     gdown.download(url, output_path, quiet=False, fuzzy=True)
 
 def add_documents_in_batches(
@@ -46,12 +46,12 @@ def add_documents_in_batches(
             try:
                 qdrant_store.add_documents(batch)
                 added_docs += len(batch)
-                print(f"[OK] Qdrant: Добавлено {added_docs}/{total_docs} документов")
+                logger.info(f"[OK] Qdrant: Добавлено {added_docs}/{total_docs} документов")
                 break
 
             except Exception as e:
                 retry_count += 1
-                print(f"[FAIL] Qdrant: Ошибка при добавлении батча {i//batch_size + 1}, попытка {retry_count}/{max_retries}: {e}")
+                logger.info(f"[FAIL] Qdrant: Ошибка при добавлении батча {i//batch_size + 1}, попытка {retry_count}/{max_retries}: {e}")
                 time.sleep(5)
                 if retry_count >= max_retries:
                     raise e
@@ -125,7 +125,7 @@ def chunk_upload_qdrant(
     splitter: RecursiveCharacterTextSplitter
 ):
     chunks = get_chunks(pdf_path, splitter)
-    print(f"{len(chunks)} чанков")
+    logger.info(f"{len(chunks)} чанков")
     add_documents_in_batches(qdrant_store, chunks)
 
 
@@ -134,6 +134,10 @@ def main():
     if not os.path.exists(settings.TEMP_DIR):
         os.mkdir(settings.TEMP_DIR)
 
+    if is_collection_exists(qdrant_client, settings.QDRANT_COLLECTION):
+        logger.info(f"Коллекция {settings.QDRANT_COLLECTION} уже существует")
+        return
+    
     filename = uuid4().hex + ".pdf"
     pdf_path = os.path.join(settings.TEMP_DIR, filename)
     download_pdf(settings.QDRANT_BOOK_URL, pdf_path)
@@ -147,13 +151,6 @@ def main():
         strip_whitespace=True
     )
 
-    if is_collection_exists(qdrant_client, settings.QDRANT_COLLECTION):
-        if len(get_chunks(pdf_path, splitter)) == qdrant_client.count(settings.QDRANT_COLLECTION).count:
-            print(f"Коллекция '{settings.QDRANT_COLLECTION}' уже существует")
-            os.remove(pdf_path)
-            return
-        qdrant_client.delete_collection(settings.QDRANT_COLLECTION)
-
     qdrant_client.create_collection(
         collection_name=settings.QDRANT_COLLECTION,
         vectors_config=models.VectorParams(
@@ -161,7 +158,7 @@ def main():
             distance=models.Distance.COSINE
         )
     )
-    print(f"Коллекция '{settings.QDRANT_COLLECTION}' создана")
+    logger.info(f"Коллекция {settings.QDRANT_COLLECTION} только что была создана")
 
     chunk_upload_qdrant(
         pdf_path=pdf_path,

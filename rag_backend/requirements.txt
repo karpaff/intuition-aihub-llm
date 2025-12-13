@@ -14,3 +14,4 @@ tinydb==4.8.2
 pydantic==2.11.7
 fastapi==0.124.4
 uvicorn==0.38.0
+loguru==0.7.3
