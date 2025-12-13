@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  rag_backend:
+    build:
+      context: ./rag_backend
+      dockerfile: Dockerfile
+    container_name: rag_backend
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
